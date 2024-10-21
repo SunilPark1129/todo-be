@@ -24,7 +24,7 @@ userController.createUser = async (req, res) => {
 
     res.status(200).json({ status: "success" });
   } catch (error) {
-    res.status(400).json({ status: "fail" });
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 
@@ -32,6 +32,7 @@ userController.loginWithEmail = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }, "-createdAt -updatedAt -__v");
+
     if (user) {
       // 두개의 암호가 compareSync를 사용하여 같은지 확인하기
       isMatch = bcrypt.compareSync(password, user.password);
@@ -42,9 +43,11 @@ userController.loginWithEmail = async (req, res) => {
       } else {
         throw new Error("아이디 또는 비밀번호가 일치하지 않습니다");
       }
+    } else {
+      throw new Error("아이디 또는 비밀번호가 일치하지 않습니다");
     }
   } catch (error) {
-    res.status(400).json({ status: "fail", error });
+    res.status(400).json({ status: "fail", message: error.message });
   }
 };
 
