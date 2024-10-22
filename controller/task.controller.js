@@ -18,6 +18,7 @@ taskController.createTask = async (req, res) => {
 taskController.getTask = async (req, res) => {
   try {
     // populate => collection 들을 join-like 해준다
+    // ID가 참조하고 있는 것을 그 정보로 replace 해달라는 의미
     const taskList = await Task.find({}).populate("author");
     res.status(200).json({ status: "ok", data: taskList });
   } catch (err) {
